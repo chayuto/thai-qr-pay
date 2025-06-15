@@ -23,7 +23,6 @@ Ruby Gem สำหรับการชำระเงินผ่าน QR ต�
 
 ## Installation / การติดตั้ง
 
-
 ```bash
 gem install thai_qr_pay
 ````
@@ -38,10 +37,9 @@ require 'thai_qr_pay'
 
 ### 1. Parsing a QR payload / วิเคราะห์ QR payload
 
-
 ```ruby
 qr_string = '000201010212...6304ABCD'
-parser = ThaiQrPay::Parser.new(qr_string, strict: true)
+parser    = ThaiQrPay::Parser.new(qr_string, strict: true)
 
 puts parser.get_tag_value('00')        # => '01'
 puts parser.get_tag_value('29', '01')  # nested sub-tag
@@ -60,12 +58,9 @@ payload = ThaiQrPay::Generate::Promptpay::AnyID.payload(
 # => "00020101021229...6304XXXX"
 ```
 
-
-
 ---
 
 ### 3. Generating PromptPay Bill Payment / สร้าง PromptPay Bill Payment
-
 
 ```ruby
 payload = ThaiQrPay::Generate::Promptpay::BillPayment.payload(
@@ -75,22 +70,19 @@ payload = ThaiQrPay::Generate::Promptpay::BillPayment.payload(
 )
 ```
 
-
 ---
 
 ### 4. Converting BOT Barcode → QR Tag 30 / แปลง BOT Barcode เป็น QR Tag 30
 
-
 ```ruby
-raw = "|1234567890123\rINV001\r\r012345"
-bot = ThaiQrPay::BOTBarcode.from_string(raw)
-qr_tag30 = bot.to_qr_tag30
+raw    = "|1234567890123\rINV001\r\r012345"
+bot    = ThaiQrPay::BOTBarcode.from_string(raw)
+qr_tag = bot.to_qr_tag30
 ```
 
 ---
 
 ### 5. Validating Slip Verify / ตรวจสอบ Slip-verify
-
 
 ```ruby
 result = ThaiQrPay::Validate::SlipVerify.call(qr_string)
@@ -117,6 +109,45 @@ else
 end
 ```
 
+---
+
+### 7. Generating Slip-Verify QR / สร้าง QR สำหรับ Slip-verify
+
+```ruby
+payload = ThaiQrPay::Generate::SlipVerify.payload(
+  sending_bank: 'KBank',
+  trans_ref:    'REF12345'
+)
+# => "0004...5102TH...9104XXXX"
+```
+
+---
+
+### 8. Generating TrueMoney Payment QR / สร้าง QR สำหรับ TrueMoney
+
+```ruby
+payload = ThaiQrPay::Generate::TrueMoney.payload(
+  mobile_no: '0812345678',
+  amount:    150.0,
+  message:   'สวัสดี'
+)
+# => "00020101...2920A000000677010111031514000081234567853037645802TH5406150.008112...6304XXXX"
+```
+
+---
+
+### 9. Generating TrueMoney Slip-Verify QR / สร้าง QR สำหรับ TrueMoney Slip-verify
+
+```ruby
+payload = ThaiQrPay::Generate::TrueMoneySlipVerify.payload(
+  event_type:     'PAYMENT',
+  transaction_id: 'TX123456',
+  date:           '20250615'
+)
+# => "0005...000101010402PAYMENT0308TX1234560408202506159104XXXX"
+```
+
+---
 
 ## License
 
