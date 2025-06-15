@@ -43,7 +43,7 @@ RSpec.describe ThaiQrPay::Parser do
 
     it 'fetches nested sub-tag value' do
       # Tag '29' contains sub-tags; '01' inside gives the MSISDN with 66 prefix
-      expected_msisdn = mobile.sub(/^0/, '66')
+      expected_msisdn = mobile.sub(/^0/, '66').rjust(13, '0')
       expect(parser.get_tag_value('29', '01')).to eq(expected_msisdn)
     end
 

@@ -21,8 +21,8 @@ module ThaiQrPay
           raise Error, 'Unknown type' unless PROXY.key?(type)
 
           if type == 'MSISDN'
-            # replace leading 0 with 66
-            target = target.sub(/^0/, '66')
+            t = target.sub(/^0/, '66')
+            target = t.rjust(13, '0')
           end
 
           sub = [

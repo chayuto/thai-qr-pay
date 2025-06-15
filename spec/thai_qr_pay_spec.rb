@@ -25,7 +25,7 @@ RSpec.describe ThaiQrPay do
       expect(parser.get_tag_value('01')).to eq('12')    # Point-of-Initiation Method
 
       # Sub-tag 29.01 contains the converted mobile number (no padding)
-      expected_msisdn = mobile.sub(/^0/, '66')
+      expected_msisdn = mobile.sub(/^0/, '66').rjust(13, '0')
       expect(parser.get_tag_value('29', '01')).to eq(expected_msisdn)
 
       expect(parser.valid_crc?).to be true
